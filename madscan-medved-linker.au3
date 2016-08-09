@@ -4,9 +4,9 @@
 #include <Misc.au3>
 #include <Array.au3>
 
-
-; Ссылка на xml, содержащий название комании
-; Global Const $yqlAPICompanyNameRequest = "http://d.yimg.com/autoc.finance.yahoo.com/autoc?query=<SYMBOL>&callback=YAHOO.Finance.SymbolSuggest.ssCallback"
+; Alters the method that is used to match window titles during search operations.
+; AutoItSetOption (WinTitleMatchMode, 2)
+Opt("WinTitleMatchMode", 2)
 
 ; Ссылка на текст, содержащий сектор и индустрии компании
 Global Const $yqlAPICompanySectorRequest = "http://www.stock-watcher.com/quote/<SYMBOL>"
@@ -67,14 +67,14 @@ While 1
 	  $symbPrev = $Ticker
 
 	  ; Активируем окно Medved
-       _WinWaitActivate("[NAME:panelMain]", "")
-      Local $hMedved = ControlGetHandle("[NAME:panelMain]", "", "")
-	  ; ConsoleWrite("$hMedved: " & $hMedved & @CRLF)
-	  ; ControlClick("", "", "[CLASS:SunAwtFrame]", "left", 2, 106, 66)
+      _WinWaitActivate("B:", "")
+	  Local $hTOS = ControlGetHandle("classname=WindowsForms10.Window.20808.app.0.ea7f4a_r12_ad1", "", "")
+	  ;ConsoleWrite("$hTOS: " & $hTOS & @CRLF)
+	  ;ControlClick("", "", "[CLASS:WindowsForms10.Window.8.app.0.ea7f4a_r12_ad1]", "left", 2, 106, 66)
 
 	  ; Отправляем тикер в поле для тикера окна TOS (весь целиком)
-	  ControlSend ("", "", $hMedved, $Ticker & "{ENTER}", 0)
-	  ; ConsoleWrite("@error: " & @error & @CRLF)
+	  ControlSend ("", "", $hTOS, $Ticker  & "{ENTER}", 0)
+	  ;ConsoleWrite("@error ControlSend: " & @error & @CRLF)
 
 	  ; Вызов функции для получения инфо компании по тикеру
 	  $Ticker = StringRegExpReplace ($Ticker, "/[A-Z]+", "", 0)
@@ -100,6 +100,7 @@ Func _WinWaitActivate($title,$text,$timeout=0)
     WinWait($title,$text,$timeout)
     If Not WinActive($title,$text) Then WinActivate($title,$text)
     WinWaitActive($title,$text,$timeout)
+	; ConsoleWrite("@error _WinWaitActivate: " & @error & @CRLF)
  EndFunc
 
 ; Выход из программы
