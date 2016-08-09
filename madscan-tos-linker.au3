@@ -66,21 +66,15 @@ While 1
 	  ; Обновляем $symbPrev
 	  $symbPrev = $Ticker
 
-	  ; Активируем окно TOS
-       _WinWaitActivate("[CLASS:SunAwtFrame]", "")
-      Local $hTOS = ControlGetHandle("[CLASS:SunAwtFrame]", "", "")
-	  ; ConsoleWrite("$hTOS: " & $hTOS & @CRLF)
+	  ; Активируем окно Medved
+       _WinWaitActivate("[NAME:panelMain]", "")
+      Local $hMedved = ControlGetHandle("[NAME:panelMain]", "", "")
+	  ; ConsoleWrite("$hMedved: " & $hMedved & @CRLF)
 	  ; ControlClick("", "", "[CLASS:SunAwtFrame]", "left", 2, 106, 66)
 
 	  ; Отправляем тикер в поле для тикера окна TOS (весь целиком)
-	  ControlSend ("", "", $hTOS, $Ticker & "{ENTER}", 0)
+	  ControlSend ("", "", $hMedved, $Ticker & "{ENTER}", 0)
 	  ; ConsoleWrite("@error: " & @error & @CRLF)
-
-;~	  Отправляем тикер в поле для тикера окна TOS (посимвольно)
-;~ 	  For $element In $TickerArray
-;~ 		 Send($element)
-;~ 	  Next
-;~ 	  Send( "{ENTER}")
 
 	  ; Вызов функции для получения инфо компании по тикеру
 	  $Ticker = StringRegExpReplace ($Ticker, "/[A-Z]+", "", 0)
@@ -91,49 +85,7 @@ While 1
 
    EndIf
 
-   ; Ручное информирование :)
-
-   ; Определяем заголовок активного окна
-   ; Local $windowTitle = WinGetTitle("[ACTIVE]", "")
-   ; ConsoleWrite("$windowTitle=" & $windowTitle & @LF)
-
-   ; Если активное окно - это окно Level2, то
-   ; If StringInStr($windowTitle, "Level2") = 1 Then
-
-      ; Определяем видимый текст окна Level2
-      ; Local $hActiveText = $windowTitle
-      ; ConsoleWrite("$hActiveText=" & $hActiveText & @LF)
-
-      ; Из видимого текста выбираем тикер, по паттерну
-      ; $symbArray = StringRegExp($hActiveText, '([A-Z|\.\-\+]+)~', 1, 1)
-      ; If @error > 0 Then
-          ; ConsoleWrite("StringRegExp@error=" & @error & @LF)
-          ; MsgBox(0, "StringRegExp@error", @error)
-      ; EndIf
-
-      ; Тикер
-      ; Local $symbNew = _ArrayToString($symbArray, "")
-
-      ; Если значение тикера изменилось, то
-      ; If $symbNew <> $symbPrev Then
-         ; ConsoleWrite("$symbNew=" & $symbNew & @LF )
-
-         ; Обнулям предыдущее значение надписи
-         ; ControlSetText($pic, "", $hDC, "")
-
-         ; Вызов функции для получения инфо компании по тикеру
-         ; $sSymbolInfo = GetCompanyInfo($symbNew)
-
-         ; Устанавливаем значения надписи в соответствии с инфо о компании
-         ; GUICtrlSetData($hDC, $sSymbolInfo)
-
-         ; Заменяем предыдущее значение тикера на новое
-         ; $symbPrev = $symbNew
-      ; EndIf
-
-   ; EndIf
-
-   ; Если нажата правая клавиша мышки - выход из цикла
+    ; Если нажата правая клавиша мышки - выход из цикла
    If _IsPressed("02") Then
       ExitLoop
    EndIf
@@ -157,27 +109,6 @@ EndFunc
 
 ; Получение инфо о компании по тикеру
 Func GetCompanyInfo($sSymbol)
-
-   ;ConsoleWrite("SYMBOL: " & $sSymbol & @CRLF)
-   ; $sRequest = StringReplace($yqlAPICompanyNameRequest, "<SYMBOL>", $sSymbol)
-   ; ConsoleWrite("$sRequest: " & $sRequest & @CRLF)
-
-   ; Получение информации об имени компании
-   ; $bData = InetRead($sRequest)
-
-   ; $aLines = BinaryToString($bData, 4)
-   ; $aLines = StringReplace($aLines, "},{", @CRLF)
-   ; ConsoleWrite("$aLines: " & $aLines & @CRLF)
-
-   ; $array = StringRegExp($aLines, '"name":(.*),"exch":.*:"(.*)",', 1, 1)
-
-   ; If @error = 0 then
-	  ; ConsoleWrite ("$array[0]: " & $array[0] & @CRLF)
-	  ; ConsoleWrite ("$array[1]: " & $array[1] & @CRLF)
-	  ; $sCompanyInfo = ($array[0] & ", " & $array[1] & ", " & @CRLF)
-   ; Else
-	  ; $sCompanyInfo = "N/A, "
-   ; EndIf
 
    ; Получение информации о секторе и индустрии компании
 
